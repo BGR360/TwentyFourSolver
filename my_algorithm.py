@@ -151,6 +151,18 @@ def get_factors(n):
     """
     return list(set(reduce(list.__add__, ([i, n//i] for i in range(1, int(sqrt(n)) + 1) if n % i == 0))))
 
+def exclude(lst, value):
+    """
+    Returns lst excluding the first occurrence of value. Performs a deep copy in doing so.
+    This is useful when we want to pass the n - 1 "other" numbers to another recursion of our solve() method.
+    :param lst: The list we want to exclude value from
+    :param value: The value we want to exclude
+    :return: lst with the first occurrence of value excluded from it.
+    """
+    other_lst = lst[:]  # Perform a deep copy so we can safely modify it
+    other_lst.remove(value)
+    return other_lst
+
 
 def is_correct(solution, value=24):
     """
@@ -214,7 +226,7 @@ def solve(numbers, value):
     factors = get_factors(value)
     factors_in_list = []
     for num in numbers:
-        if num in factors:
+        if num in factors and num not in factors_in_list:
             factors_in_list.append(num)
 
     # Prefer smaller factors
@@ -225,8 +237,7 @@ def solve(numbers, value):
         num_attempts += 1
         other_factor = value / factor
         # See if the other n - 1 numbers can arrive at the other_factor
-        other_numbers = numbers
-        other_numbers.remove(factor)
+        other_numbers = exclude(numbers, factor)
         solution = solve(other_numbers, other_factor)
         # If so, append a '*' operation to the end of the solution
         if solution:
@@ -241,13 +252,12 @@ def solve(numbers, value):
         num_attempts += 1
         result = value - num
         # See if the other n - 1 numbers can arrive at the result
-        other_numbers = numbers
-        other_numbers.remove(num)
+        other_numbers = exclude(numbers, num)
         solution = solve(other_numbers, result)
         # If so, append a '+' operation to the end of the solution
         if solution:
             solution.numbers.append(num)
-            solution.operations.apped(ADD)
+            solution.operations.append(ADD)
             return solution
 
     # 6.  Try adding to value
@@ -256,13 +266,12 @@ def solve(numbers, value):
         num_attempts += 1
         result = value + num
         # See if the other n - 1 numbers can arrive at the result
-        other_numbers = numbers
-        other_numbers.remove(num)
+        other_numbers = exclude(numbers, num)
         solution = solve(other_numbers, result)
         # If so, append a '+' operation to the end of the solution
         if solution:
             solution.numbers.append(num)
-            solution.operations.apped(SUB)
+            solution.operations.append(SUB)
             return solution
 
     # 7.  Try multiplying value
@@ -271,13 +280,12 @@ def solve(numbers, value):
         num_attempts += 1
         result = value * num
         # See if the other n - 1 numbers can arrive at the result
-        other_numbers = numbers
-        other_numbers.remove(num)
+        other_numbers = exclude(numbers, num)
         solution = solve(other_numbers, result)
         # If so, append a '/' operation to the end of the solution
         if solution:
             solution.numbers.append(num)
-            solution.operations.apped(DIV)
+            solution.operations.append(DIV)
             return solution
 
     return False
