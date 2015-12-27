@@ -144,11 +144,12 @@ final_solution = None
 
 def get_factors(n):
     """
-    Returns all the factors of n
+    Returns all the factors of n.
+    Code for this method can be attributed to user agf on StackExchange
     :param n: An integer
     :return: A list of whole-number factors of n
     """
-    return set(reduce(list.__add__, ([i, n//i] for i in range(1, int(sqrt(n)) + 1) if n % i == 0)))
+    return list(set(reduce(list.__add__, ([i, n//i] for i in range(1, int(sqrt(n)) + 1) if n % i == 0))))
 
 
 def is_correct(solution, value=24):
@@ -188,6 +189,7 @@ def solve(numbers, value):
             return False
 
     # 2.  Try adding all the numbers together.
+    num_attempts += 1
     if sum(numbers) == value:
         solution.numbers = numbers
         for i in range(n - 1):
@@ -195,6 +197,7 @@ def solve(numbers, value):
         return solution
 
     # 3.  Try multiplying all the numbers together.
+    num_attempts += 1
     product = 1
     for num in numbers:
         product *= num
@@ -204,14 +207,78 @@ def solve(numbers, value):
             solution.operations.append(MUL)
         return solution
 
+
     # 4.  If there are factors of value in numbers, pick one.
+
+    # Find the factors
+    factors = get_factors(value)
+    factors_in_list = []
+    for num in numbers:
+        if num in factors:
+            factors_in_list.append(num)
+
+    # Prefer smaller factors
+    factors_in_list.sort()
+
+    # Make an attempt for each factor in the list
+    for factor in factors_in_list:
+        num_attempts += 1
+        other_factor = value / factor
+        # See if the other n - 1 numbers can arrive at the other_factor
+        other_numbers = numbers
+        other_numbers.remove(factor)
+        solution = solve(other_numbers, other_factor)
+        # If so, append a '*' operation to the end of the solution
+        if solution:
+            solution.numbers.append(factor)
+            solution.operations.append(MUL)
+            return solution
 
 
     # 5.  Try subtracting from value
+    # Try it for each number in numbers
+    for num in numbers:
+        num_attempts += 1
+        result = value - num
+        # See if the other n - 1 numbers can arrive at the result
+        other_numbers = numbers
+        other_numbers.remove(num)
+        solution = solve(other_numbers, result)
+        # If so, append a '+' operation to the end of the solution
+        if solution:
+            solution.numbers.append(num)
+            solution.operations.apped(ADD)
+            return solution
 
     # 6.  Try adding to value
+    # Try it for each number in numbers
+    for num in numbers:
+        num_attempts += 1
+        result = value + num
+        # See if the other n - 1 numbers can arrive at the result
+        other_numbers = numbers
+        other_numbers.remove(num)
+        solution = solve(other_numbers, result)
+        # If so, append a '+' operation to the end of the solution
+        if solution:
+            solution.numbers.append(num)
+            solution.operations.apped(SUB)
+            return solution
 
     # 7.  Try multiplying value
+    # Try it for each number in numbers
+    for num in numbers:
+        num_attempts += 1
+        result = value * num
+        # See if the other n - 1 numbers can arrive at the result
+        other_numbers = numbers
+        other_numbers.remove(num)
+        solution = solve(other_numbers, result)
+        # If so, append a '/' operation to the end of the solution
+        if solution:
+            solution.numbers.append(num)
+            solution.operations.apped(DIV)
+            return solution
 
     return False
 
