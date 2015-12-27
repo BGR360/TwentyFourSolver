@@ -3,6 +3,7 @@ This is the brute-force way of finding a solution to a 24 Card.
 It just tries every possible combination to find a solution.
 """
 
+import sys
 from itertools import permutations
 from itertools import product
 
@@ -123,11 +124,15 @@ def solve_card(card):
 # The 24 card. It's an array of 4 numbers
 card = []
 
-# Get the card's numbers from the user
-user_input = raw_input("Please enter 4 numbers separated by a space: ")
-split_input = user_input.split()
-for num_str in split_input:
-    card.append(int(num_str))
+# Get the card's numbers from the user (or from the program's arguments)
+if len(sys.argv) <= 1:
+    user_input = raw_input("Please enter 4 numbers separated by a space: ")
+    split_input = user_input.split()
+    for num_str in split_input:
+        card.append(int(num_str))
+else:
+    for arg in sys.argv[1:]:
+        card.append(int(arg))
 
 # Solve the card
 result = solve_card(card)
