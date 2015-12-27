@@ -78,12 +78,43 @@ def is_correct(solution, value=24):
     return solution.evaluate() == value
 
 
-# Constants for the different Operators
-MUL = Operator('*')
-ADD = Operator('+')
-SUB = Operator('-')
-DIV = Operator('/')
-OPS = [MUL, ADD, SUB, DIV]
+
+def solve_card(card):
+    """
+    This is the big cahuna; it solves the 24 Card using the brute-force algorithm
+    :param card: An array representing the 24 Card
+    :return: Returns an array where the first element is a Solution instance if a solution was found, and False if no
+    solution was found. The second element is always the number of attempts that were made to solve it.
+    """
+
+    # Constants for the different Operators
+    MUL = Operator('*')
+    ADD = Operator('+')
+    SUB = Operator('-')
+    DIV = Operator('/')
+    OPS = [MUL, ADD, SUB, DIV]
+
+    # The number of different combinations we've tried to find the answer
+    num_attempts = 0
+    current_attempt = Solution()
+
+    # First, try multiplying all four numbers
+    num_attempts += 1
+    current_attempt.numbers = card
+    current_attempt.operations = [MUL, MUL, MUL]
+    if is_correct(current_attempt):
+        return [current_attempt, num_attempts]
+
+    # Second, try adding all four numbers
+    num_attempts += 1
+    current_attempt.operations = [ADD, ADD, ADD]
+    if is_correct(current_attempt):
+        return [current_attempt, num_attempts]
+
+    # If nothing worked, no solution was found
+    return False
+
+
 
 # The 24 card. It's an array of 4 numbers
 card = []
@@ -94,28 +125,14 @@ split_input = user_input.split()
 for num_str in split_input:
     card.append(int(num_str))
 
-# The number of different combinations we've tried to find the answer
-num_attempts = 0
-solution_found = False
-current_attempt = Solution()
+# Solve the card
+result = solve_card(card)
+solution = result[0]
+num_attempts = result[1]
 
-# First, try multiplying all four numbers
-num_attempts += 1
-current_attempt.numbers = card
-current_attempt.operations = [MUL, MUL, MUL]
-if is_correct(current_attempt):
-    solution_found = True
-
-# Second, try adding all four numbers
-num_attempts += 1
-current_attempt.operations = [ADD, ADD, ADD]
-if is_correct(current_attempt):
-    solution_found = True
-
-# If nothing worked, no solution was found
 # Print results
-if solution_found:
-    print "Solution: %s" % current_attempt.to_string()
+if solution != False:
+    print "Solution: %s" % solution.to_string()
 else:
     print "No solution found."
 
