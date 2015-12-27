@@ -137,15 +137,14 @@ def is_correct(solution, value=24):
     return solution.evaluate() == value
 
 
-
-def solve_card(card):
+def solve(numbers, value):
     """
-    This method solves the 24 Card using my custom algorithm
-    :param card: An array representing the 24 Card
-    :return: Returns an array where the first element is a Solution instance if a solution was found, and False if no
-    solution was found. The second element is always the number of attempts that were made to solve it.
+    Uses arithmetic (*, +, -, /) to arrive at value, using my custom recursive algorithm
+    :param numbers: The list of numbers we're going to use to arrive at value
+    :param value: The value that we want to arrive at using all of the
+    :return: Returns a list. The first element is always True or False depending on if it is solvable. If solvable,
+    there is a second element which is a Solution instance
     """
-
     # Constants for the different Operators
     MUL = Operator('*')
     ADD = Operator('+')
@@ -160,6 +159,15 @@ def solve_card(card):
     # Begin my algorithm
     return [False, num_attempts]
 
+
+def solve_card(card):
+    """
+    This method solves the 24 Card using my custom algorithm
+    :param card: A list representing the 24 Card
+    :return: Returns a list where the first element is a Solution instance if a solution was found, and False if no
+    solution was found. The second element is always the number of attempts that were made to solve it.
+    """
+    return solve(card, 24)
 
 
 # The 24 card. It's an array of 4 numbers
