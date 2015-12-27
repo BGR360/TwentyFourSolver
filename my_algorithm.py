@@ -127,6 +127,19 @@ class Solution(object):
         return result
 
 
+# Constants for the different Operators
+MUL = Operator('*')
+ADD = Operator('+')
+SUB = Operator('-')
+DIV = Operator('/')
+OPS = [MUL, ADD, SUB, DIV]
+
+# The number of different combinations we've tried to find the answer
+num_attempts = 0
+current_attempt = Solution()
+final_solution = None
+
+
 def is_correct(solution, value=24):
     """
     Checks if solution evaluates to value
@@ -142,30 +155,51 @@ def solve(numbers, value):
     Uses arithmetic (*, +, -, /) to arrive at value, using my custom recursive algorithm
     :param numbers: The list of numbers we're going to use to arrive at value
     :param value: The value that we want to arrive at using all of the
-    :return: Returns a list. The first element is always True or False depending on if it is solvable. If solvable,
-    there is a second element which is a Solution instance
+    :return: If solvable, returns True. If not, returns False.
     """
-    # Constants for the different Operators
-    MUL = Operator('*')
-    ADD = Operator('+')
-    SUB = Operator('-')
-    DIV = Operator('/')
-    OPS = [MUL, ADD, SUB, DIV]
-
-    # The number of different combinations we've tried to find the answer
-    num_attempts = 0
-    current_attempt = Solution()
+    # Referring to the global variables we want to modify
+    global num_attempts
+    global current_attempt
 
     # Begin my algorithm
-    return [False, num_attempts]
+    n = len(numbers)
+
+    # 1. If n = 1
+    if n < 1:
+        return False
+    if n == 1:
+        if numbers[0] == value:
+            return True
+        else:
+            return False
+
+    # 2.  Try adding all the numbers together.
+    if sum(numbers) == value:
+        return True
+
+    # 3.  Try multiplying all the numbers together.
+    product = 1
+    for num in numbers:
+        product *= num
+    if product == value:
+        return True
+
+    # 4.  If there are factors of value in numbers, pick one.
+
+    # 5.  Try subtracting from value
+
+    # 6.  Try adding to value
+
+    # 7.  Try multiplying value
+
+    return False
 
 
 def solve_card(card):
     """
     This method solves the 24 Card using my custom algorithm
     :param card: A list representing the 24 Card
-    :return: Returns a list where the first element is a Solution instance if a solution was found, and False if no
-    solution was found. The second element is always the number of attempts that were made to solve it.
+    :return: Returns a Solution instance if a solution was found, and False if no solution was found.
     """
     return solve(card, 24)
 
@@ -180,12 +214,10 @@ for num_str in split_input:
     card.append(int(num_str))
 
 # Solve the card
-result = solve_card(card)
-solution = result[0]
-num_attempts = result[1]
+solution = solve_card(card)
 
 # Print results
-if solution != False:
+if solution:
     print "Solution: %s" % solution
 else:
     print "No solution found."
