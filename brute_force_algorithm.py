@@ -3,6 +3,9 @@ This is the brute-force way of finding a solution to a 24 Card.
 It just tries every possible combination to find a solution.
 """
 
+from itertools import permutations
+from itertools import product
+
 class Operator(object):
     """
     Represents an operator ('*', '+', '-', '/') used in solving a 24 Card.
@@ -27,6 +30,9 @@ class Operator(object):
             return left / right
         else:
             return "Error"
+
+    def __repr__(self):
+        return str(self.op)
 
 class Solution(object):
     """
@@ -55,7 +61,7 @@ class Solution(object):
             result = operator.evaluate(left, right)
         return result
 
-    def to_string(self):
+    def __repr__(self):
         """
         Makes a human-readable string to represent this Solution
         :return The string representation of this Solution
@@ -98,21 +104,19 @@ def solve_card(card):
     num_attempts = 0
     current_attempt = Solution()
 
-    # First, try multiplying all four numbers
-    num_attempts += 1
-    current_attempt.numbers = card
-    current_attempt.operations = [MUL, MUL, MUL]
-    if is_correct(current_attempt):
-        return [current_attempt, num_attempts]
-
-    # Second, try adding all four numbers
-    num_attempts += 1
-    current_attempt.operations = [ADD, ADD, ADD]
-    if is_correct(current_attempt):
-        return [current_attempt, num_attempts]
+    # The brute force algorithm simply tests all possible permutations of the numbers
+    # and the operators between them
+    for number_perm in permutations(card):
+        for operator_perm in product(OPS, repeat=3):
+            num_attempts += 1
+            current_attempt.numbers = number_perm
+            current_attempt.operations = operator_perm
+            # print "Testing: %s" % current_attempt
+            if is_correct(current_attempt):
+                return [current_attempt, num_attempts]
 
     # If nothing worked, no solution was found
-    return False
+    return [False, num_attempts]
 
 
 
@@ -132,7 +136,7 @@ num_attempts = result[1]
 
 # Print results
 if solution != False:
-    print "Solution: %s" % solution.to_string()
+    print "Solution: %s" % solution
 else:
     print "No solution found."
 
