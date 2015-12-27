@@ -53,9 +53,37 @@ class Solution(object):
             right = self.numbers[i]
             operator = self.operations[i - 1]
             result = operator.evaluate(left, right)
-
         return result
 
+    def to_string(self):
+        """
+        Makes a human-readable string to represent this Solution
+        :return The string representation of this Solution
+        """
+        result = str(self.numbers[0])
+        for i in range(1, len(self.numbers)):
+            op = self.operations[i - 1].op
+            num = self.numbers[i]
+            result += " " + op + " " + str(num)
+        return result
+
+
+def is_correct(solution, value=24):
+    """
+    Checks if solution evaluates to value
+    :param solution: The Solution instance that should be checked
+    :param value: The number that we expect solution to evaluate to
+    :return: True if solution evaluates to value, False if otherwise
+    """
+    return solution.evaluate() == value
+
+
+# Constants for the different Operators
+MUL = Operator('*')
+ADD = Operator('+')
+SUB = Operator('-')
+DIV = Operator('/')
+OPS = [MUL, ADD, SUB, DIV]
 
 # The 24 card. It's an array of 4 numbers
 card = []
@@ -68,4 +96,27 @@ for num_str in split_input:
 
 # The number of different combinations we've tried to find the answer
 num_attempts = 0
+solution_found = False
+current_attempt = Solution()
 
+# First, try multiplying all four numbers
+num_attempts += 1
+current_attempt.numbers = card
+current_attempt.operations = [MUL, MUL, MUL]
+if is_correct(current_attempt):
+    solution_found = True
+
+# Second, try adding all four numbers
+num_attempts += 1
+current_attempt.operations = [ADD, ADD, ADD]
+if is_correct(current_attempt):
+    solution_found = True
+
+# If nothing worked, no solution was found
+# Print results
+if solution_found:
+    print "Solution: %s" % current_attempt.to_string()
+else:
+    print "No solution found."
+
+print "Number of attempts: %s" % num_attempts
