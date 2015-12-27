@@ -155,13 +155,14 @@ def solve(numbers, value):
     Uses arithmetic (*, +, -, /) to arrive at value, using my custom recursive algorithm
     :param numbers: The list of numbers we're going to use to arrive at value
     :param value: The value that we want to arrive at using all of the
-    :return: If solvable, returns True. If not, returns False.
+    :return: If solvable, returns a Solution instance. If not, returns False.
     """
     # Referring to the global variables we want to modify
     global num_attempts
     global current_attempt
 
     # Begin my algorithm
+    solution = Solution()
     n = len(numbers)
 
     # 1. If n = 1
@@ -169,20 +170,28 @@ def solve(numbers, value):
         return False
     if n == 1:
         if numbers[0] == value:
-            return True
+            solution.numbers = [value]
+            solution.operations = []
+            return solution
         else:
             return False
 
     # 2.  Try adding all the numbers together.
     if sum(numbers) == value:
-        return True
+        solution.numbers = numbers
+        for i in range(n - 1):
+            solution.operations.append(ADD)
+        return solution
 
     # 3.  Try multiplying all the numbers together.
     product = 1
     for num in numbers:
         product *= num
     if product == value:
-        return True
+        solution.numbers = numbers
+        for i in range(n - 1):
+            solution.operations.append(MUL)
+        return solution
 
     # 4.  If there are factors of value in numbers, pick one.
 
