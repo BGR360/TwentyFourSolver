@@ -59,6 +59,8 @@ Given n numbers (stored in array A), can you use arithmetic to arrive at x?
         ii) If not, then no solution
 """
 
+from math import sqrt
+
 class Operator(object):
     """
     Represents an operator ('*', '+', '-', '/') used in solving a 24 Card.
@@ -138,6 +140,15 @@ OPS = [MUL, ADD, SUB, DIV]
 num_attempts = 0
 current_attempt = Solution()
 final_solution = None
+
+
+def factors(n):
+    """
+    Returns all the factors of n
+    :param n: An integer
+    :return: A list of whole-number factors of n
+    """
+    return set(reduce(list.__add__, ([i, n//i] for i in range(1, int(sqrt(n)) + 1) if n % i == 0)))
 
 
 def is_correct(solution, value=24):
