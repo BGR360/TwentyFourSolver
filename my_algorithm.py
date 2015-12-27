@@ -223,27 +223,28 @@ def solve(numbers, value):
     # 4.  If there are factors of value in numbers, pick one.
 
     # Find the factors
-    factors = get_factors(value)
-    factors_in_list = []
-    for num in numbers:
-        if num in factors and num not in factors_in_list:
-            factors_in_list.append(num)
+    if (value >= 0):
+        factors = get_factors(value)
+        factors_in_list = []
+        for num in numbers:
+            if num in factors and num not in factors_in_list:
+                factors_in_list.append(num)
 
-    # Prefer smaller factors
-    factors_in_list.sort()
+        # Prefer smaller factors
+        factors_in_list.sort()
 
-    # Make an attempt for each factor in the list
-    for factor in factors_in_list:
-        num_attempts += 1
-        other_factor = value / factor
-        # See if the other n - 1 numbers can arrive at the other_factor
-        other_numbers = exclude(numbers, factor)
-        solution = solve(other_numbers, other_factor)
-        # If so, append a '*' operation to the end of the solution
-        if solution:
-            solution.numbers.append(factor)
-            solution.operations.append(MUL)
-            return solution
+        # Make an attempt for each factor in the list
+        for factor in factors_in_list:
+            num_attempts += 1
+            other_factor = value / factor
+            # See if the other n - 1 numbers can arrive at the other_factor
+            other_numbers = exclude(numbers, factor)
+            solution = solve(other_numbers, other_factor)
+            # If so, append a '*' operation to the end of the solution
+            if solution:
+                solution.numbers.append(factor)
+                solution.operations.append(MUL)
+                return solution
 
 
     # 5.  Try subtracting from value
