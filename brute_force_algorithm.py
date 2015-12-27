@@ -47,7 +47,14 @@ class Solution(object):
         num1 <op1> num2 <op2> num3 <op3> num4
         :return: The result of evaluating the Solution.
         """
-        return 0
+        result = self.numbers[0]
+        for i in range(1, len(self.numbers)):
+            left = result
+            right = self.numbers[i]
+            operator = self.operations[i - 1]
+            result = operator.evaluate(left, right)
+
+        return result
 
 
 # The 24 card. It's an array of 4 numbers
