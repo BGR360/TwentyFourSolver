@@ -142,7 +142,7 @@ current_attempt = Solution()
 final_solution = None
 
 
-def factors(n):
+def get_factors(n):
     """
     Returns all the factors of n
     :param n: An integer
@@ -205,6 +205,7 @@ def solve(numbers, value):
         return solution
 
     # 4.  If there are factors of value in numbers, pick one.
+
 
     # 5.  Try subtracting from value
 
