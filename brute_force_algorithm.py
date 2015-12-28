@@ -54,13 +54,16 @@ class Solution(object):
         num1 <op1> num2 <op2> num3 <op3> num4
         :return: The result of evaluating the Solution.
         """
-        result = self.numbers[0]
-        for i in range(1, len(self.numbers)):
-            left = result
-            right = self.numbers[i]
-            operator = self.operations[i - 1]
-            result = operator.evaluate(left, right)
-        return result
+        if len(self.numbers) > 0:
+            result = self.numbers[0]
+            for i in range(1, len(self.numbers)):
+                left = result
+                right = self.numbers[i]
+                operator = self.operations[i - 1]
+                result = operator.evaluate(left, right)
+            return result
+        else:
+            return False
 
     def __repr__(self):
         """
@@ -74,6 +77,14 @@ class Solution(object):
             result += " " + op + " " + str(num)
         return result
 
+
+def is_numeric(string):
+    """
+    Checks if a string is numeric (as in alphanumeric without the alpha)
+    :param string: The string we want to check
+    :return: True if the string is numeric, False if not
+    """
+    return string.isalnum() and not string.isalpha()
 
 def is_correct(solution, value=24):
     """
@@ -132,7 +143,8 @@ if len(sys.argv) <= 1:
         card.append(int(num_str))
 else:
     for arg in sys.argv[1:]:
-        card.append(int(arg))
+        if is_numeric(arg):
+            card.append(int(arg))
 
 # Solve the card
 result = solve_card(card)

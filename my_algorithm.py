@@ -143,6 +143,14 @@ current_attempt = Solution()
 final_solution = None
 
 
+def is_numeric(string):
+    """
+    Checks if a string is numeric (as in alphanumeric without the alpha)
+    :param string: The string we want to check
+    :return: True if the string is numeric, False if not
+    """
+    return string.isalnum() and not string.isalpha()
+
 def get_factors(n):
     """
     Returns all the factors of n.
@@ -313,7 +321,8 @@ if len(sys.argv) <= 1:
         card.append(int(num_str))
 else:
     for arg in sys.argv[1:]:
-        card.append(int(arg))
+        if is_numeric(arg):
+            card.append(int(arg))
 
 # Solve the card
 solution = solve_card(card)
