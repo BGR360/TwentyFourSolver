@@ -92,7 +92,7 @@ class Operator(object):
         elif self.op == '-':
             return left - right
         elif self.op == '/':
-            return left / right
+            return float(left) / right
         else:
             return "Error"
 
@@ -262,7 +262,7 @@ def solve(numbers, value):
 
         # d)  Try dividing the larger by the smaller
         num_attempts += 1
-        if larger / smaller == value:
+        if float(larger) / smaller == value:
             solution.numbers = [larger, smaller]
             solution.operations = [DIV]
             return solution

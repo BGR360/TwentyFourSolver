@@ -28,7 +28,7 @@ class Operator(object):
         elif self.op == '-':
             return left - right
         elif self.op == '/':
-            return left / right
+            return float(left) / right
         else:
             return "Error"
 
