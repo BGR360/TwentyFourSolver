@@ -70,16 +70,19 @@ Remember the example of the smart human. He sees that he has a 6 in his card, an
         2.  If not, then pick another factor
 6.  **If there are no more factors of x in A, then for each number a in A:**
     1.  SUBTRACT a from x
+    *   Prefer even numbers
     2.  See if the other n - 1 numbers can form the result
         1.  If so, then yes
         2.  If not, try the next number
 7.  **If that fails, then for each number a in A:**
     1.  ADD a to x
+    *   Prefer even numbers
     2.  See if the other n - 1 numbers can form the result
         1.  If so, then yes
         2.  If not, try the next number
 8.  **If that fails, then for each number a in A:**
     1.  MULTIPLY x by a
+    * Prefer smaller numbers
     2.  See if the other n - 1 numbers can form the result
         1.  If so, then yes
         2.  If not, then no solution

@@ -2,13 +2,13 @@ INCLUDING CARDS WITH NO SOLUTION:
 
 Findings:
 Average number of attempts for brute-force: 731
-Average number of attempts for my algorithm: 232
-Brute-force victories: 270
-My algorithm victories: 1550
-Number of cards where different solutions were reached: 869
+Average number of attempts for my algorithm: 230
+Brute-force victories: 265
+My algorithm victories: 1555
+Number of cards where different solutions were reached: 818
 
 THE VERDICT:
-My algorithm outperforms the brute-force algorithm 85.16% of the time (when cards with no solution are included)
+My algorithm outperforms the brute-force algorithm 85.44% of the time (when cards with no solution are included)
 On average, my algorithm is 3.2 times faster than the brute-force algorithm (when cards with no solution are included)
 
 
@@ -17,11 +17,11 @@ NOT INCLUDING CARDS WITH NO SOLUTION:
 
 Findings:
 Average number of attempts for brute-force: 234
-Average number of attempts for my algorithm: 53
-Brute-force victories: 267
-My algorithm victories: 958
-Number of cards where different solutions were reached: 869
+Average number of attempts for my algorithm: 51
+Brute-force victories: 262
+My algorithm victories: 963
+Number of cards where different solutions were reached: 818
 
 THE VERDICT:
-My algorithm outperforms the brute-force algorithm 78.20% of the time (not including cards with no solution)
-On average, my algorithm is 4.4 times faster than the brute-force algorithm (not including cards with no solution)
+My algorithm outperforms the brute-force algorithm 78.61% of the time (not including cards with no solution)
+On average, my algorithm is 4.6 times faster than the brute-force algorithm (not including cards with no solution)

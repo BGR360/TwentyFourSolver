@@ -51,18 +51,21 @@ Given n numbers (stored in array A), can you use arithmetic to arrive at x?
 
 6.  If there are no more factors of x in A, then for each number a in A:
     a)  SUBTRACT a from x
+    * Prefer even numbers
     b)  See if the other n - 1 numbers can form the result
         i)  If so, then yes
         ii) If not, try the next number
 
 7.  If that fails, then for each number a in A:
     a)  ADD a to x
+    * Prefer Even Numbers
     b)  See if the other n - 1 numbers can form the result
         i)  If so, then yes
         ii) If not, try the next number
 
 8.  If that fails, then for each number a in A:
     a)  MULTIPLY x by a
+    * Prefer smaller numbers
     b)  See if the other n - 1 numbers can form the result
         i)  If so, then yes
         ii) If not, then no solution
@@ -180,6 +183,22 @@ def exclude(lst, value):
     other_lst = lst[:]  # Perform a deep copy so we can safely modify it
     other_lst.remove(value)
     return other_lst
+
+def sort_evens_first(lst):
+    """
+    Sorts a list, putting the even numbers first (in ascending order)
+    :param lst: The list we want to sort
+    :return: The sorted list
+    """
+    lst.sort()
+    evens = []
+    odds = []
+    for num in lst:
+        if num % 2 == 0:
+            evens.append(num)
+        else:
+            odds.append(num)
+    return evens + odds
 
 
 def is_correct(solution, value=24):
@@ -305,7 +324,6 @@ def solve(numbers, value):
 
         # Make an attempt for each factor in the list
         for factor in factors_in_list:
-            # num_attempts += 1
             other_factor = value / factor
             # See if the other n - 1 numbers can arrive at the other_factor
             other_numbers = exclude(numbers, factor)
@@ -319,8 +337,9 @@ def solve(numbers, value):
 
     # 6.  Try subtracting from value
     # Try it for each number in numbers
-    for num in numbers:
-        # num_attempts += 1
+    # Prefer even numbers
+    numbers_evens_first = sort_evens_first(numbers)
+    for num in numbers_evens_first:
         result = value - num
         # See if the other n - 1 numbers can arrive at the result
         other_numbers = exclude(numbers, num)
@@ -333,8 +352,8 @@ def solve(numbers, value):
 
     # 7.  Try adding to value
     # Try it for each number in numbers
-    for num in numbers:
-        # num_attempts += 1
+    # Prefer even numbers
+    for num in numbers_evens_first:
         result = value + num
         # See if the other n - 1 numbers can arrive at the result
         other_numbers = exclude(numbers, num)
@@ -347,8 +366,9 @@ def solve(numbers, value):
 
     # 8.  Try multiplying value
     # Try it for each number in numbers
+    # Prefer smaller numbers
+    numbers.sort()
     for num in numbers:
-        # num_attempts += 1
         result = value * num
         # See if the other n - 1 numbers can arrive at the result
         other_numbers = exclude(numbers, num)
