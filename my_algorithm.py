@@ -198,10 +198,13 @@ def solve(numbers, value):
     solution = Solution()
     n = len(numbers)
 
+    # print "Solve %s for %s" % (numbers, value)
+
     # 1. If n = 1
     if n < 1:
         return False
     if n == 1:
+        num_attempts += 1
         if numbers[0] == value:
             solution.numbers = [value]
             solution.operations = []
@@ -244,7 +247,7 @@ def solve(numbers, value):
 
         # Make an attempt for each factor in the list
         for factor in factors_in_list:
-            num_attempts += 1
+            # num_attempts += 1
             other_factor = value / factor
             # See if the other n - 1 numbers can arrive at the other_factor
             other_numbers = exclude(numbers, factor)
@@ -259,7 +262,7 @@ def solve(numbers, value):
     # 5.  Try subtracting from value
     # Try it for each number in numbers
     for num in numbers:
-        num_attempts += 1
+        # num_attempts += 1
         result = value - num
         # See if the other n - 1 numbers can arrive at the result
         other_numbers = exclude(numbers, num)
@@ -273,7 +276,7 @@ def solve(numbers, value):
     # 6.  Try adding to value
     # Try it for each number in numbers
     for num in numbers:
-        num_attempts += 1
+        # num_attempts += 1
         result = value + num
         # See if the other n - 1 numbers can arrive at the result
         other_numbers = exclude(numbers, num)
@@ -287,7 +290,7 @@ def solve(numbers, value):
     # 7.  Try multiplying value
     # Try it for each number in numbers
     for num in numbers:
-        num_attempts += 1
+        # num_attempts += 1
         result = value * num
         # See if the other n - 1 numbers can arrive at the result
         other_numbers = exclude(numbers, num)

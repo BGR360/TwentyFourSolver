@@ -15,10 +15,19 @@ my_attempts = []
 brute_force_victories = 0
 my_victories = 0
 
+total_to_test = len(list(combinations_with_replacement(range(1, 14), 4)))
+current_test = 0
+print "Total cards to test: %s" % total_to_test
+
 # Test all possible 24 Cards
 for card in combinations_with_replacement(range(1, 14), 4):
-    # Convert to an array of strings
+    current_test += 1
+    if current_test % 100 == 0:
+        print "%s Cards tested" % current_test
+
     # print card
+
+    # Convert card to an array of strings
     card_as_str = []
     for num in card:
         card_as_str.append(str(num))
