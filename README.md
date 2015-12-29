@@ -3,7 +3,7 @@ My very first Python project. An algorithm to solve 24-Cards (a math game).
 
 ## Current Stats
 
-My algorithm is **4.4 times** as fast as the brute-force algorithm.
+My algorithm is **4.4 times** as efficient as the brute-force algorithm.
 
 My algorithm outperforms the brute-force **78.2%** of the time.
 
@@ -38,7 +38,7 @@ The obvious solution to coding a 24 Card solver is to test *all possible combina
 
 ## My Approach
 
-My idea was to create a more algorithmic approach to the problem. How can I make the computer think more like a human? When humans are trying to solve a 24 Card, they don't just try every possible combination at random. They think of the **factors** of 24 and how they can form them. They break the problem down into smaller ones. For example, if a card has a 6 in it, a smart human might think, "How can I use the other three numbers to make 4? Then I could do 4 * 6 = 24." My ultimate goal was to develop an algorithm that could drastically outperform the brute-force algorithm.
+My idea was to create a more algorithmic approach to the problem. How can I make the computer think more like a human? When humans are trying to solve a 24 Card, they don't just try every possible combination at random. They think of the **factors** of 24 and how they can form them. They break the problem down into smaller ones. For example, if a card has a 6 in it, a smart human might think, "How can I use the other three numbers to make 4? Then I could do 4 * 6 = 24." My ultimate goal was to develop an algorithm that could think in this manner and thus drastically outperform the brute-force algorithm.
 
 ### Generalizing
 
