@@ -30,29 +30,38 @@ Given n numbers (stored in array A), can you use arithmetic to arrive at x?
     a)  If A[0] = x, then yes
     b)  If A[0] != x, then no
 
-2.  Try adding all the numbers in A together.
+2.  If n = 2:
+    a)  Try multiplying the two numbers
+    b)  Try adding the two numbers
+    c)  If x >= 0
+        i)  Try subtracting the smaller from the larger
+        ii) Else try subtracting the larger from the smaller
+    d)  Try dividing the larger by the smaller
+    e)  If any of those work, then yes. If not, then no solution.
 
-3.  Try multiplying all the numbers in A together.
+3.  Try adding all the numbers in A together.
 
-4.  If there are factors of x in A, pick one.
+4.  Try multiplying all the numbers in A together.
+
+5.  If there are factors of x in A, pick one.
     * Prefer 1 as a factor of x, and then prefer smaller factors
     a)  See if the other n - 1 numbers can make the other factor of x
         i)  If so, then yes
         ii) If not, then pick another factor
 
-5.  If there are no more factors of x in A, then for each number a in A:
+6.  If there are no more factors of x in A, then for each number a in A:
     a)  SUBTRACT a from x
     b)  See if the other n - 1 numbers can form the result
         i)  If so, then yes
         ii) If not, try the next number
 
-6.  If that fails, then for each number a in A:
+7.  If that fails, then for each number a in A:
     a)  ADD a to x
     b)  See if the other n - 1 numbers can form the result
         i)  If so, then yes
         ii) If not, try the next number
 
-7.  If that fails, then for each number a in A:
+8.  If that fails, then for each number a in A:
     a)  MULTIPLY x by a
     b)  See if the other n - 1 numbers can form the result
         i)  If so, then yes
@@ -212,7 +221,56 @@ def solve(numbers, value):
         else:
             return False
 
-    # 2.  Try adding all the numbers together.
+    # 2.  If n = 2:
+    if n == 2:
+        # a)  Try multiplying the two numbers
+        num_attempts += 1
+        if numbers[0] * numbers[1] == value:
+            solution.numbers = numbers
+            solution.operations = [MUL]
+            return solution
+
+        # b)  Try adding the two numbers
+        num_attempts += 1
+        if numbers[0] + numbers[1] == value:
+            solution.numbers = numbers
+            solution.operations = [ADD]
+            return solution
+
+        # Find the larger and the smaller number of the two
+        smaller = numbers[0]
+        larger = numbers[1]
+        if smaller > larger:
+            smaller = numbers[1]
+            larger = numbers[0]
+
+        # c)  If x >= 0
+        if value >= 0:
+            # i)  Try subtracting the smaller from the larger
+            num_attempts += 1
+            if larger - smaller == value:
+                solution.numbers = [larger, smaller]
+                solution.operations = [SUB]
+                return solution
+        else:
+            # ii) Else try subtracting the larger from the smaller
+            num_attempts += 1
+            if smaller - larger == value:
+                solution.numbers = [smaller, larger]
+                solution.operations = [SUB]
+                return solution
+
+        # d)  Try dividing the larger by the smaller
+        num_attempts += 1
+        if larger / smaller == value:
+            solution.numbers = [larger, smaller]
+            solution.operations = [DIV]
+            return solution
+
+        # e)  If any of those work, then yes. If not, then no solution.
+        return False
+
+    # 3.  Try adding all the numbers together.
     num_attempts += 1
     if sum(numbers) == value:
         solution.numbers = numbers
@@ -220,7 +278,7 @@ def solve(numbers, value):
             solution.operations.append(ADD)
         return solution
 
-    # 3.  Try multiplying all the numbers together.
+    # 4.  Try multiplying all the numbers together.
     num_attempts += 1
     product = 1
     for num in numbers:
@@ -232,7 +290,7 @@ def solve(numbers, value):
         return solution
 
 
-    # 4.  If there are factors of value in numbers, pick one.
+    # 5.  If there are factors of value in numbers, pick one.
 
     # Find the factors
     if value > 0:
@@ -259,7 +317,7 @@ def solve(numbers, value):
                 return solution
 
 
-    # 5.  Try subtracting from value
+    # 6.  Try subtracting from value
     # Try it for each number in numbers
     for num in numbers:
         # num_attempts += 1
@@ -273,7 +331,7 @@ def solve(numbers, value):
             solution.operations.append(ADD)
             return solution
 
-    # 6.  Try adding to value
+    # 7.  Try adding to value
     # Try it for each number in numbers
     for num in numbers:
         # num_attempts += 1
@@ -287,7 +345,7 @@ def solve(numbers, value):
             solution.operations.append(SUB)
             return solution
 
-    # 7.  Try multiplying value
+    # 8.  Try multiplying value
     # Try it for each number in numbers
     for num in numbers:
         # num_attempts += 1
