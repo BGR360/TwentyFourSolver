@@ -7,11 +7,13 @@ import subprocess
 from itertools import combinations_with_replacement
 from itertools import izip
 
+MAX_NUM_TESTS = -1
+INCLUDE_NO_SOLUTION_CARDS = False
 MAX_CARD_NUMBER = 14
 REPORT_EVERY_N_TESTS = 50
-REPORT_EVERY_N_RESULTS = 100
+REPORT_EVERY_N_RESULTS = 2000
 NUM_LINES_PER_RESULT = 2
-REPORT_EVERY_N_LINES = NUM_LINES_PER_RESULT * REPORT_EVERY_N_TESTS
+REPORT_EVERY_N_LINES = NUM_LINES_PER_RESULT * REPORT_EVERY_N_RESULTS
 SOLUTION_INDICATOR_STR = "Solution:"
 NO_SOLUTION_INDICATOR_STR = "No solution found."
 ATTEMPTS_INDICATOR_STR = "Number of attempts:"
@@ -43,15 +45,16 @@ def extract_data_from_output(file):
             print "%s Results processed" % num_results_processed
 
         # See if this line begins the output for a test case
-        if SOLUTION_INDICATOR_STR in line or NO_SOLUTION_INDICATOR_STR in line:
+        if SOLUTION_INDICATOR_STR in line or (INCLUDE_NO_SOLUTION_CARDS and NO_SOLUTION_INDICATOR_STR in line):
             # If so, extract the solution and the number of attempts
             index = line.find(SOLUTION_INDICATOR_STR)
             solution = ""
-            if index > 0:
+            if index >= 0:
                 end_index = index + len(SOLUTION_INDICATOR_STR)
                 solution = line[end_index:]
             else:
                 solution = "No solution"
+            # print solution
 
             # Extract the number of attempts from the next line
             num_lines_read += 1
@@ -62,6 +65,7 @@ def extract_data_from_output(file):
                 end_index = index + len(ATTEMPTS_INDICATOR_STR)
                 num_attempts = int(line[end_index:])
                 data.append(TestResult(solution, num_attempts))
+                # print num_attempts
 
         line = file.readline()
 
@@ -84,16 +88,17 @@ def average_num_attempts(data):
 execute_brute_force_algorithm = ['python', 'brute_force_algorithm.py']
 execute_my_algorithm = ['python', 'my_algorithm.py']
 
-# Open two output files to track the output of the tests
-brute_force_output_file = open('brute_force_output.txt', 'w')
-my_output_file = open('my_output.txt', 'w')
+# Two lists of strings to keep track of the algorithms' output
+brute_force_output = []
+my_output = []
 
 # Keep track of how many cards we're testing
-total_to_test = len(list(combinations_with_replacement(range(1, MAX_CARD_NUMBER), 4)))
+total_to_test = MAX_NUM_TESTS if MAX_NUM_TESTS != -1 \
+    else len(list(combinations_with_replacement(range(1, MAX_CARD_NUMBER), 4)))
 current_test = 0
 print "Total cards to test: %s" % total_to_test
 
-# Test all possible 24 Cards
+# Test all possible 24 Cards (unless MAX_NUM_TESTS is specified)
 for card in combinations_with_replacement(range(1, MAX_CARD_NUMBER), 4):
     current_test += 1
     if current_test % REPORT_EVERY_N_TESTS == 0:
@@ -106,27 +111,42 @@ for card in combinations_with_replacement(range(1, MAX_CARD_NUMBER), 4):
     for num in card:
         card_as_str.append(str(num))
 
-    # Solve the card with both algorithms
-
+    # Solve the card with both algorithms and append the output to the proper lists
     brute_force_command = execute_brute_force_algorithm + card_as_str
     my_command = execute_my_algorithm + card_as_str
 
-    brute_force_output = subprocess.check_output(brute_force_command)
-    my_output = subprocess.check_output(my_command)
+    brute_force_output.append(subprocess.check_output(brute_force_command))
+    my_output.append(subprocess.check_output(my_command))
 
-    # Append the output to the proper files.
-    brute_force_output_file.write(brute_force_output)
-    my_output_file.write(my_output)
-
+    # Stop if MAX_NUM_TESTS is specified
+    if MAX_NUM_TESTS != -1 and current_test > MAX_NUM_TESTS:
+        break
 
 print "All tests completed."
-print
-print "Processing results..."
 
-# Close and reopen the files as read-only
+print "Writing output files..."
+
+# Write the big huge output strings to two files
+brute_force_output_file = open('brute_force_output.txt', 'w')
+my_output_file = open('my_output.txt', 'w')
+
+join_str = ""
+brute_force_output_file.write(join_str.join(brute_force_output))
+my_output_file.write(join_str.join(my_output))
+
+# Clear the big huge strings to free memory
+brute_force_output = []
+my_output = []
+
+# Close the files
 brute_force_output_file.close()
 my_output_file.close()
 
+print "Done."
+print
+print "Processing results..."
+
+# Reopen the files as read-only
 brute_force_output_file = open('brute_force_output.txt', 'r')
 my_output_file = open('my_output.txt', 'r')
 
@@ -171,9 +191,26 @@ for brute_force_test_result, my_test_result in izip(brute_force_data, my_data):
     if brute_force_solution != my_solution:
         num_discrepancies += 1
 
+# More calculations
+my_winning_percentage = float(my_victories) / (my_victories + brute_force_victories) * 100
+my_algorithm_times_faster = float(brute_force_average) / my_average
+
+print "All results processed."
+print
+print "Findings:"
+
+no_solution_str = "when cards with no solution are included" if INCLUDE_NO_SOLUTION_CARDS \
+    else "not including cards with no solution"
+
 # Print out the findings
 print "Average number of attempts for brute-force: %s" % brute_force_average
 print "Average number of attempts for my algorithm: %s" % my_average
 print "Brute-force victories: %s" % brute_force_victories
 print "My algorithm victories: %s" % my_victories
 print "Number of cards where different solutions were reached: %s" % num_discrepancies
+print
+print "THE VERDICT:"
+print "My algorithm outperforms the brute-force algorithm %.2f%% of the time (%s)" \
+      % (my_winning_percentage, no_solution_str)
+print "On average, my algorithm is %.1f times faster than the brute-force algorithm (%s)" \
+      % (my_algorithm_times_faster, no_solution_str)
