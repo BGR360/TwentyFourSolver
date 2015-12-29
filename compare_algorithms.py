@@ -8,7 +8,7 @@ from itertools import combinations_with_replacement
 from itertools import izip
 
 MAX_NUM_TESTS = -1
-INCLUDE_NO_SOLUTION_CARDS = False
+INCLUDE_NO_SOLUTION_CARDS = True
 MAX_CARD_NUMBER = 14
 REPORT_EVERY_N_TESTS = 50
 REPORT_EVERY_N_RESULTS = 2000
@@ -45,7 +45,7 @@ def extract_data_from_output(file):
             print "%s Results processed" % num_results_processed
 
         # See if this line begins the output for a test case
-        if SOLUTION_INDICATOR_STR in line or (INCLUDE_NO_SOLUTION_CARDS and NO_SOLUTION_INDICATOR_STR in line):
+        if SOLUTION_INDICATOR_STR in line or  NO_SOLUTION_INDICATOR_STR in line:
             # If so, extract the solution and the number of attempts
             index = line.find(SOLUTION_INDICATOR_STR)
             solution = ""
@@ -79,8 +79,9 @@ def average_num_attempts(data):
     """
     total = 0
     for test_result in data:
-        attempts = test_result.attempts
-        total += attempts
+        if INCLUDE_NO_SOLUTION_CARDS or test_result.solution != "No solution":
+            attempts = test_result.attempts
+            total += attempts
     return total / len(data)
 
 
@@ -174,16 +175,21 @@ num_discrepancies = 0
 
 if len(brute_force_data) != len(my_data):
     print "Unexpected: Number of test results for each algorithm are not the same."
+    print "Number of results for brute-force algorithm: %s" % len(brute_force_data)
+    print "Number of results for my algorithm: %s" % len(my_data)
     sys.exit(1)
 
 for brute_force_test_result, my_test_result in izip(brute_force_data, my_data):
-    # See who won
-    brute_force_attempts = brute_force_test_result.attempts
-    my_attempts = my_test_result.attempts
-    if my_attempts < brute_force_attempts:
-        my_victories += 1
-    else:
-        brute_force_victories += 1
+    # See who won (if not INCLUDE_NO_SOLUTION, check that there was a solution for both)
+    is_brute_force_solution = brute_force_test_result.solution != "No solution"
+    is_my_solution = my_test_result.solution != "No solution"
+    if INCLUDE_NO_SOLUTION_CARDS or (is_brute_force_solution and is_my_solution):
+        brute_force_attempts = brute_force_test_result.attempts
+        my_attempts = my_test_result.attempts
+        if my_attempts < brute_force_attempts:
+            my_victories += 1
+        else:
+            brute_force_victories += 1
 
     # Check if they arrived at the same solution
     brute_force_solution = brute_force_test_result.solution
