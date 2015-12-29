@@ -3,7 +3,7 @@ My very first Python project. An algorithm to solve 24-Cards (a math game).
 
 ## Current Stats
 
-My algorithm is **4.4 times** as fast as the brute-force algorithm.
+My algorithm is **4.4 times** as efficient as the brute-force algorithm.
 
 My algorithm outperforms the brute-force **78.2%** of the time.
 
@@ -32,13 +32,13 @@ For example, this card is not solvable without grouping. Here is the solution: (
 
 Currently, my algorithm does not account for this rule, but **stay tuned!** In the future I plan to improve the algorithm to include this possibility.
 
-## Brute-Force Algorithm
+## Brute-Force Approach
 
 The obvious solution to coding a 24 Card solver is to test *all possible combinations* of numbers and operations until you find a solution. This is, as I call it, the "brute-force" algorithm. The implementation for this algorithm can be found in [brute_force_algorithm.py](brute_force_algorithm.py).
 
-## My Algorithm
+## My Approach
 
-My idea was to create a more algorithmic approach to the problem. How can I make the computer think more like a human? When humans are trying to solve a 24 Card, they don't just try every possible combination at random. They think of the **factors** of 24 and how they can form them. They break the problem down into smaller ones. For example, if a card has a 6 in it, a smart human might think, "How can I use the other three numbers to make 4? Then I could do 4 * 6 = 24." My ultimate goal was to develop an algorithm that could drastically outperform the brute-force algorithm.
+My idea was to create a more algorithmic approach to the problem. How can I make the computer think more like a human? When humans are trying to solve a 24 Card, they don't just try every possible combination at random. They think of the **factors** of 24 and how they can form them. They break the problem down into smaller ones. For example, if a card has a 6 in it, a smart human might think, "How can I use the other three numbers to make 4? Then I could do 4 * 6 = 24." My ultimate goal was to develop an algorithm that could think in this manner and thus drastically outperform the brute-force algorithm.
 
 ### Generalizing
 
@@ -46,7 +46,9 @@ Remember the example of the smart human. He sees that he has a 6 in his card, an
 
 **How can I make _x_ out of a list of _n_ numbers?**
 
-### Description of My Algorithm
+That is the question that my algorithm answers. You can find the implementation of this algorithm in [my_algorithm.py](my_algorithm.py)
+
+### My Algorithm in Full
 
 **Given _n_ numbers (stored in array _A_), can you use arithmetic to arrive at _x_?**
 
