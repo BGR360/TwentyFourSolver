@@ -232,7 +232,7 @@ def solve(numbers, value):
     # 4.  If there are factors of value in numbers, pick one.
 
     # Find the factors
-    if (value >= 0):
+    if value > 0:
         factors = get_factors(value)
         factors_in_list = []
         for num in numbers:
