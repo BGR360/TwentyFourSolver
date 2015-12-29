@@ -3,9 +3,9 @@ My very first Python project. An algorithm to solve 24-Cards (a math game).
 
 ## Current Stats
 
-My algorithm is **4.4 times** as efficient as the brute-force algorithm.
+My algorithm is **4.6 times** as efficient as the brute-force algorithm.
 
-My algorithm outperforms the brute-force **78.2%** of the time.
+My algorithm outperforms the brute-force **78.6%** of the time.
 
 See [findings.txt](findings.txt) for more details.
 
